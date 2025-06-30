@@ -9,10 +9,10 @@ interface VideoAgentModalProps {
   language: string;
 }
 
-const VideoAgentModal: React.FC<VideoAgentModalProps> = ({ 
-  onClose, 
-  chatbotId, 
-  language 
+const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
+  onClose,
+  chatbotId,
+  language
 }) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
@@ -28,7 +28,7 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
 
   useEffect(() => {
     startVideoConversation();
-    
+
     // Cleanup function to ensure call is ended
     return () => {
       if (conversationId && !hasEndedRef.current) {
@@ -75,12 +75,12 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
         session_id: `video_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         max_duration: 1800 // 30 minutes
       });
-      
+
       setConversationId(response.conversation_id);
       setConversationUrl(response.conversation_url);
       setChatbotInfo(response.chatbot);
       setIsConnected(true);
-      
+
       console.log('Video conversation started:', response);
     } catch (error: any) {
       console.error('Failed to start video conversation:', error);
@@ -92,9 +92,9 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
 
   const endConversationSilently = async () => {
     if (!conversationId || hasEndedRef.current) return;
-    
+
     hasEndedRef.current = true;
-    
+
     try {
       // Use navigator.sendBeacon for reliable cleanup during page unload
       if (navigator.sendBeacon) {
@@ -115,7 +115,7 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
 
   const endConversation = async () => {
     if (!conversationId || hasEndedRef.current || isEnding) return;
-    
+
     setIsEnding(true);
     hasEndedRef.current = true;
 
@@ -179,9 +179,8 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
         <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/80 to-transparent p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className={`w-3 h-3 rounded-full animate-pulse ${
-                isConnected ? 'bg-green-500' : isConnecting ? 'bg-yellow-500' : 'bg-red-500'
-              }`}></div>
+              <div className={`w-3 h-3 rounded-full animate-pulse ${isConnected ? 'bg-green-500' : isConnecting ? 'bg-yellow-500' : 'bg-red-500'
+                }`}></div>
               <h3 className="font-semibold text-white">
                 {chatbotInfo?.name || 'AI Video Agent'}
               </h3>
@@ -189,7 +188,7 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
                 {isConnecting ? 'Connecting...' : isConnected ? 'Connected' : 'Disconnected'}
               </span>
             </div>
-            
+
             <button
               onClick={handleClose}
               disabled={isEnding}
@@ -240,7 +239,7 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
             </div>
           )}
 
-          {isConnected && conversationUrl && (
+          {/* {isConnected && conversationUrl && (
             <iframe
               ref={iframeRef}
               src={conversationUrl}
@@ -248,8 +247,12 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
               allow="camera; microphone; fullscreen"
               title="AI Video Agent"
             />
-          )}
+          )} */}
 
+
+          {isConnected && conversationUrl && (
+            window.location.href = conversationUrl
+          )}
           {/* Demo Video Placeholder (when Tavus is not available) */}
           {!conversationUrl && !isConnecting && !error && (
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900">
@@ -261,7 +264,7 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
                 <p className="text-white/80 mb-6">Demo mode - Video agent would appear here</p>
                 <div className="bg-white/10 backdrop-blur-md rounded-lg p-4 max-w-md">
                   <p className="text-white/90 text-sm">
-                    In production, this would show a live video conversation with an AI agent 
+                    In production, this would show a live video conversation with an AI agent
                     trained on your company's knowledge base.
                   </p>
                 </div>
@@ -275,11 +278,10 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
           <div className="flex items-center justify-center space-x-4">
             <button
               onClick={toggleMute}
-              className={`p-4 rounded-full transition-colors ${
-                isMuted 
-                  ? 'bg-red-600 hover:bg-red-700' 
+              className={`p-4 rounded-full transition-colors ${isMuted
+                  ? 'bg-red-600 hover:bg-red-700'
                   : 'bg-white/20 hover:bg-white/30'
-              }`}
+                }`}
               title={isMuted ? 'Unmute' : 'Mute'}
             >
               {isMuted ? (
@@ -291,11 +293,10 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
 
             <button
               onClick={toggleVideo}
-              className={`p-4 rounded-full transition-colors ${
-                !isVideoEnabled 
-                  ? 'bg-red-600 hover:bg-red-700' 
+              className={`p-4 rounded-full transition-colors ${!isVideoEnabled
+                  ? 'bg-red-600 hover:bg-red-700'
                   : 'bg-white/20 hover:bg-white/30'
-              }`}
+                }`}
               title={isVideoEnabled ? 'Turn off video' : 'Turn on video'}
             >
               {isVideoEnabled ? (
