@@ -23,7 +23,6 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [chatbotInfo, setChatbotInfo] = useState<any>(null);
   const [isEnding, setIsEnding] = useState(false);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
   const hasEndedRef = useRef(false);
 
   useEffect(() => {
@@ -238,17 +237,6 @@ const VideoAgentModal: React.FC<VideoAgentModalProps> = ({
               </div>
             </div>
           )}
-
-          {/* {isConnected && conversationUrl && (
-            <iframe
-              ref={iframeRef}
-              src={conversationUrl}
-              className="w-full h-full"
-              allow="camera; microphone; fullscreen"
-              title="AI Video Agent"
-            />
-          )} */}
-
 
           {isConnected && conversationUrl && (
             window.location.href = conversationUrl
